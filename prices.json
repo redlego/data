@@ -1,0 +1,377 @@
+{
+    "acrobat-9-pro-extended": {
+        "prices": {
+            "united-kingdom": "1038.78", 
+            "sverige": "1220.68", 
+            "eastern-europe": "1142.70", 
+            "finland": "1142.70", 
+            "denmark": "1143.39", 
+            "north-america": "699.00", 
+            "deutschland": "1142.70", 
+            "france": "1142.70", 
+            "schweiz": "1240.73", 
+            "osterreich": "1142.70", 
+            "ireland": "1142.70", 
+            "belgium": "1142.70"
+        }, 
+        "product-name": "Acrobat 9 Pro Extended"
+    }, 
+    "coldfusion-8-standard-edition": {
+        "prices": {
+            "united-kingdom": "1418.54", 
+            "sverige": "1670.56", 
+            "eastern-europe": "1561.27", 
+            "finland": "1561.27", 
+            "denmark": "1555.08", 
+            "north-america": "1299.00", 
+            "deutschland": "1561.27", 
+            "france": "1561.27", 
+            "schweiz": "1698.39", 
+            "osterreich": "1561.27", 
+            "ireland": "1561.27", 
+            "belgium": "1561.27"
+        }, 
+        "product-name": "ColdFusion 8 Standard Edition"
+    }, 
+    "audition-3": {
+        "prices": {
+            "united-kingdom": "443.59", 
+            "sverige": "518.86", 
+            "eastern-europe": "486.94", 
+            "finland": "486.94", 
+            "denmark": "484.68", 
+            "north-america": "349.00", 
+            "deutschland": "486.94", 
+            "france": "486.94", 
+            "schweiz": "530.08", 
+            "osterreich": "486.94", 
+            "ireland": "486.94", 
+            "belgium": "486.94"
+        }, 
+        "product-name": "Audition 3"
+    }, 
+    "acrobat-9-standard": {
+        "prices": {
+            "united-kingdom": "443.59", 
+            "sverige": "518.86", 
+            "eastern-europe": "486.94", 
+            "finland": "486.94", 
+            "denmark": "484.68", 
+            "north-america": "299.00", 
+            "deutschland": "486.94", 
+            "france": "486.94", 
+            "schweiz": "530.08", 
+            "osterreich": "486.94", 
+            "ireland": "486.94", 
+            "belgium": "486.94"
+        }, 
+        "product-name": "Acrobat 9 Standard"
+    }, 
+    "creative-suite-5-production-premium": {
+        "prices": {
+            "united-kingdom": "2407.85", 
+            "sverige": "2834.26", 
+            "eastern-europe": "2649.56", 
+            "finland": "2649.56", 
+            "denmark": "2649.81", 
+            "north-america": "1699.00", 
+            "deutschland": "2928.61", 
+            "france": "2928.61", 
+            "schweiz": "3181.47", 
+            "osterreich": "2928.61", 
+            "ireland": "2649.56", 
+            "belgium": "2649.56"
+        }, 
+        "product-name": "Creative Suite 5 Production Premium"
+    }, 
+    "after-effects-cs5": {
+        "prices": {
+            "united-kingdom": "1393.01", 
+            "sverige": "1640.57", 
+            "eastern-europe": "1533.37", 
+            "finland": "1533.37", 
+            "denmark": "1532.63", 
+            "north-america": "999.00", 
+            "deutschland": "1672.89", 
+            "france": "1672.89", 
+            "schweiz": "1820.05", 
+            "osterreich": "1672.89", 
+            "ireland": "1533.37", 
+            "belgium": "1533.37"
+        }, 
+        "product-name": "After Effects CS5"
+    }, 
+    "coldfusion-9-standard-edition": {
+        "prices": {
+            "united-kingdom": "1418.54", 
+            "sverige": "1670.56", 
+            "eastern-europe": "1561.27", 
+            "finland": "1561.27", 
+            "denmark": "1560.70", 
+            "north-america": "1299.00", 
+            "deutschland": "1561.27", 
+            "france": "1561.27", 
+            "schweiz": "1698.39", 
+            "osterreich": "1561.27", 
+            "ireland": "1561.27", 
+            "belgium": "1561.27"
+        }, 
+        "product-name": "ColdFusion 9 Standard Edition"
+    }, 
+    "acrobat-connect-pro": {
+        "prices": {
+            "north-america": null
+        }, 
+        "product-name": "Acrobat Connect Pro"
+    }, 
+    "creative-suite-5-design-premium": {
+        "prices": {
+            "united-kingdom": "2407.85", 
+            "sverige": "3434.10", 
+            "eastern-europe": "2649.56", 
+            "finland": "2649.56", 
+            "denmark": "2649.81", 
+            "north-america": "1899.00", 
+            "deutschland": "3207.66", 
+            "france": "3207.66", 
+            "schweiz": "3484.65", 
+            "osterreich": "3207.66", 
+            "ireland": "2649.56", 
+            "belgium": "2649.56"
+        }, 
+        "product-name": "Creative Suite 5 Design Premium"
+    }, 
+    "coldfusion-builder": {
+        "prices": {
+            "united-kingdom": "272.86", 
+            "sverige": "320.92", 
+            "eastern-europe": "299.98", 
+            "finland": "299.98", 
+            "denmark": "297.54", 
+            "north-america": "299.00", 
+            "deutschland": "299.98", 
+            "france": "299.98", 
+            "schweiz": "327.32", 
+            "osterreich": "299.98", 
+            "ireland": "299.98", 
+            "belgium": "299.98"
+        }, 
+        "product-name": "ColdFusion Builder"
+    }, 
+    "captivate-5": {
+        "prices": {
+            "united-kingdom": "887.19", 
+            "sverige": "1040.73", 
+            "eastern-europe": "975.27", 
+            "finland": "975.27", 
+            "denmark": "974.97", 
+            "north-america": "799.00", 
+            "deutschland": "975.27", 
+            "france": "975.27", 
+            "schweiz": "1061.14", 
+            "osterreich": "975.27", 
+            "ireland": "975.27", 
+            "belgium": "975.27"
+        }, 
+        "product-name": "Captivate 5"
+    }, 
+    "acrobat-9-pro": {
+        "prices": {
+            "united-kingdom": "708.47", 
+            "sverige": "830.78", 
+            "eastern-europe": "779.94", 
+            "finland": "779.94", 
+            "denmark": "780.35", 
+            "north-america": "449.00", 
+            "deutschland": "779.94", 
+            "france": "779.94", 
+            "schweiz": "848.71", 
+            "osterreich": "779.94", 
+            "ireland": "779.94", 
+            "belgium": "779.94"
+        }, 
+        "product-name": "Acrobat 9 Pro"
+    }, 
+    "coldfusion-8-enterprise-edition": {
+        "prices": {
+            "united-kingdom": "8172.98", 
+            "sverige": "9636.48", 
+            "eastern-europe": "8997.90", 
+            "finland": "8997.90", 
+            "denmark": "8961.84", 
+            "north-america": "7499.00", 
+            "deutschland": "8997.90", 
+            "france": "8997.90", 
+            "schweiz": "9780.00", 
+            "osterreich": "8997.90", 
+            "ireland": "8997.90", 
+            "belgium": "8997.90"
+        }, 
+        "product-name": "ColdFusion 8 Enterprise Edition"
+    }, 
+    "coldfusion-9-enterprise-edition": {
+        "prices": {
+            "united-kingdom": "5817.78", 
+            "sverige": "6859.21", 
+            "eastern-europe": "6404.15", 
+            "finland": "6404.15", 
+            "denmark": "6405.59", 
+            "north-america": "7499.00", 
+            "deutschland": "6404.15", 
+            "france": "6404.15", 
+            "schweiz": "6960.60", 
+            "osterreich": "6404.15", 
+            "ireland": "6404.15", 
+            "belgium": "6404.15"
+        }, 
+        "product-name": "ColdFusion 9 Enterprise Edition"
+    }, 
+    "director-11.5": {
+        "prices": {
+            "united-kingdom": "1266.96", 
+            "sverige": "1490.61", 
+            "eastern-europe": "1393.84", 
+            "finland": "1393.84", 
+            "denmark": "1394.15", 
+            "north-america": "999.00", 
+            "deutschland": "1393.84", 
+            "france": "1393.84", 
+            "schweiz": "1514.94", 
+            "osterreich": "1393.84", 
+            "ireland": "1393.84", 
+            "belgium": "1393.84"
+        }, 
+        "product-name": "Director 11.5"
+    }, 
+    "creative-suite-5-master-collection": {
+        "prices": {
+            "united-kingdom": "3674.81", 
+            "sverige": "4627.79", 
+            "eastern-europe": "4044.80", 
+            "finland": "4044.80", 
+            "denmark": "4045.83", 
+            "north-america": "2599.00", 
+            "deutschland": "4323.85", 
+            "france": "4323.85", 
+            "schweiz": "4701.23", 
+            "osterreich": "4323.85", 
+            "ireland": "4044.80", 
+            "belgium": "4044.80"
+        }, 
+        "product-name": "Creative Suite 5 Master Collection"
+    }, 
+    "creative-suite-5-web-premium": {
+        "prices": {
+            "united-kingdom": "2280.20", 
+            "sverige": "2984.22", 
+            "eastern-europe": "2510.04", 
+            "finland": "2510.04", 
+            "denmark": "2509.46", 
+            "north-america": "1799.00", 
+            "deutschland": "2789.08", 
+            "france": "2789.08", 
+            "schweiz": "3030.85", 
+            "osterreich": "2789.08", 
+            "ireland": "2510.04", 
+            "belgium": "2510.04"
+        }, 
+        "product-name": "Creative Suite 5 Web Premium"
+    }, 
+    "creative-suite-5-design-standard": {
+        "prices": {
+            "united-kingdom": "1646.72", 
+            "sverige": "2534.34", 
+            "eastern-europe": "1812.42", 
+            "finland": "2370.51", 
+            "denmark": "2370.99", 
+            "north-america": "1299.00", 
+            "deutschland": "2370.51", 
+            "france": "2370.51", 
+            "schweiz": "2577.03", 
+            "osterreich": "2370.51", 
+            "ireland": "1812.42", 
+            "belgium": "1812.42"
+        }, 
+        "product-name": "Creative Suite 5 Design Standard"
+    }, 
+    "authorware-7": {
+        "prices": {
+            "united-kingdom": "3365.25", 
+            "sverige": "4045.94", 
+            "eastern-europe": "4184.32", 
+            "finland": "4184.32", 
+            "denmark": "4167.47", 
+            "north-america": "2999.00", 
+            "deutschland": "4184.32", 
+            "france": "4184.32", 
+            "schweiz": "4707.03", 
+            "osterreich": "4184.32", 
+            "ireland": "4184.32", 
+            "belgium": "4184.32"
+        }, 
+        "product-name": "Authorware 7"
+    }, 
+    "contribute-cs5": {
+        "prices": {
+            "united-kingdom": "298.39", 
+            "sverige": "296.92", 
+            "eastern-europe": "327.88", 
+            "finland": "277.65", 
+            "denmark": "276.96", 
+            "north-america": "199.00", 
+            "deutschland": "277.65", 
+            "france": "277.65", 
+            "schweiz": "304.15", 
+            "osterreich": "277.65", 
+            "ireland": "327.88", 
+            "belgium": "327.88"
+        }, 
+        "product-name": "Contribute CS5"
+    }, 
+    "dreamweaver-cs5": {
+        "prices": {
+            "united-kingdom": "569.65", 
+            "sverige": "710.81", 
+            "eastern-europe": "626.46", 
+            "finland": "626.46", 
+            "denmark": "626.90", 
+            "north-america": "399.00", 
+            "deutschland": "668.32", 
+            "france": "668.32", 
+            "schweiz": "728.98", 
+            "osterreich": "668.32", 
+            "ireland": "626.46", 
+            "belgium": "626.46"
+        }, 
+        "product-name": "Dreamweaver CS5"
+    }, 
+    "acrobat.com-premium-plus-subscription": {
+        "prices": {
+            "north-america": "39.00"
+        }, 
+        "product-name": "Acrobat.com Premium Plus subscription"
+    }, 
+    "content-server-4": {
+        "prices": {
+            "united-kingdom": "8110.75", 
+            "sverige": "9564.50", 
+            "eastern-europe": "8929.54", 
+            "finland": "8929.54", 
+            "denmark": "8930.03", 
+            "north-america": "10000.00", 
+            "deutschland": "8929.54", 
+            "france": "8929.54", 
+            "schweiz": "9708.76", 
+            "osterreich": "8929.54", 
+            "ireland": "8929.54", 
+            "belgium": "8929.54"
+        }, 
+        "product-name": "Content Server 4"
+    }, 
+    "acrobat.com-premium-basic-subscription": {
+        "prices": {
+            "north-america": "14.99"
+        }, 
+        "product-name": "Acrobat.com Premium Basic subscription"
+    }
+}
