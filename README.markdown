@@ -13,6 +13,7 @@ There are two repositories: JSON price data and the scraper.
 
 ### Data visualisation ###
 Compare Adobe's prices around the world with this data visualisation by [@premasagar](http://twitter.com/premasagar):
+
 **[http://dharmafly.com/redlego/](http://dharmafly.com/redlego)**
 
 
