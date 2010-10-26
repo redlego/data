@@ -2,32 +2,66 @@
 <html lang=en>
 <meta charset=utf-8>
 <head>
-    <script src="js/protovis-d3.2.js"></script>
-    <script src="js/viz.js"></script>
 </head>
 <body>
+    <div id=redlego-viz></div>
+    
     <script>
-        function viz(data){
-            var data = window.JSON.parse(data);
+        var log10 = Math.log(10),
+            countryLookup = {
+                sverige: "Sweden",
+                deutschland: "Germany",
+                schweiz: "Switzerland",
+                osterreich: "Austria"
+            };
         
-            for (product in data){
-                if (data.hasOwnProperty(product)){
-                    
+        /*
+        function sortByAmount(prices){ // TODO: clean up
+            var countries = [],
+                country, ret = {}, i = 0, len;
+                
+            for (country in prices){
+                if (prices.hasOwnProperty(country)){
+                    countries.push({
+                        id: country,
+                        title: countryName(country),
+                        price: prices[country]
+                    });
                 }
             }
-            lineGraph({
-                data: data["acrobat-9-pro-extended"].prices,
-                dom: "redlego-viz",
-                xLabelUnit: "$"
+            countries.sort(function(a, b){
+                return a.price < b.price;
+            });
+            len = countries.length;
+            
+            for (i=0; i<len; i++){
+                ret[i] = countries[i];
+            }
+            return ret;
+        }
+        */
+        
+        function upperCaseWords(str){ // from http://phpjs.org/functions/ucwords:569
+            return (str + '').replace(/^([a-z])|\s+([a-z])/g, function($1) {
+                return $1.toUpperCase();
             });
         }
-    
-        // Get data via Ajax request
-        get("prices.json", viz);
-    </script>
-    
-    <script type="text/javascript+protovis">
-        var log10 = Math.log(10);
+        
+        function countryName(id){
+            return countryLookup[id] || upperCaseWords(id.replace("-", " "));
+        }
+        
+        function redlegoViz(data){
+            window.onload = function(){
+                //data = sortByAmount(data["acrobat-9-pro-extended"].prices);
+                data = data["acrobat-9-pro-extended"].prices;
+                barChart({
+                    data: data,
+                    dom: "redlego-viz",
+                    xLabelUnit: "$"
+                });
+           };
+        }
     
         function keysvalues(o){
             var keys = [],
@@ -49,13 +83,11 @@
         // toPrecision(232, 2) === 230
         // toPrecision(1, 5) === 1; // precision normalised
         function toPrecision(n, precision){
-            n = parseFloat(n);
-            return Number(n.toPrecision(precision));
+            return Number(parseFloat(n).toPrecision(precision));
         }
         
         function toFixed(n, decimalPlaces){
-            n = parseFloat(n);
-            return Number(n.toFixed(decimalPlaces));
+            return Number(parseFloat(n).toFixed(decimalPlaces));
         }
         
         // idealGradation(9260) === 10000
@@ -68,61 +100,70 @@
         
         // humanNumber(4555) === "4.555K";
         // humanNumber(4555, 2) === "4.6K";
-        function humanNumber(n, precision){            
-            n = precision ? toPrecision(n, precision) : n;
-
+        function humanNumber(n, precision){ // TODO: DRY
+            n = precision ? toFixed(n, precision) : n;
+            
             if (n >= 1000000){
-                return n / 1000000 + "M";
+                n = n / 1000000;
+                n = (precision ? toFixed(n, precision) : n) + "M";
             }
             if (n >= 1000){
-                return n / 1000 + "K";
+                n = n / 1000;
+                n = (precision ? toFixed(n, precision) : n) + "K";
             }
             return n;
         }
-        
-        function lineGraph(options){
+    </script>
+    
+    <script src="js/protovis-d3.2.js"></script>    
+    <script type="text/javascript+protovis">        
+        function barChart(options){
             var // Options
                 data = keysvalues(options.data),
                 dom = options.dom,
                 xLabelUnit = options.xLabelUnit,
-            
-                // Chart sizes                
-                w = 330,
+                
+                // Chart sizes
+                w = 600,
                 h = 300,
-                yLabelTopPadding = 5,
-                yLabelBottomPadding = 14,
+                yLabelTopPadding = 7,
+                yLabelBottomPadding = 5,
+                barMargin = 7,
                 yLabelWidth = 40,
+                yLabelPadding = 7, // where the lines start from
                 idealLabelCount = 5,
-                yLabelPrecision = 1,
-                xLabelTickHeight = 3,
-                tooltipPrecision = 3,
+                yLabelPrecision = 2,
+                tooltipPrecision = 2,
                 
                 // Styles
-                strokeStyle = "#762a4b",
-                fillStyle = "#d5c5c6",
-                xLabelStrokeColor = "#d5c5c6",
+                fillStyle = "#a00",
+                strokeStyle = "#600",
+                xLabelStrokeColor = "#d99",
                 yLabelColor = "#333",
-                xLabelColor = "#333",
-                xLabelFont = "normal 10px sans-serif",
+                xLabelColor = "#fff",
+                xLabelFont = "bold 18px sans-serif",
                 xLabelStrokeWidth = 0.5,
-                lineWidth = 5,
+                barBorderWidth = 0.5,
+                // TODO: factor barBorderWidth into width and distribution calculations
                 
                 // The visualisation object
                 vizz = new pv.Panel(),
                 
                 // Processing
-                years = data.keys,
+                keys = data.keys,
                 values = data.values,
                 numValues = values.length,
                 maxValue = Math.max.apply(null, values),
-                xDistance = Math.floor((w - yLabelWidth) / numValues),
-                visWidth = xDistance * numValues + yLabelWidth,
-                visHeight = h - yLabelTopPadding - yLabelBottomPadding,
                 
+                // Bar specific
+                xDistance = Math.floor((w - yLabelWidth) / numValues) - barMargin,
+                visWidth = (xDistance + barMargin) * numValues + yLabelWidth - barMargin, // labels + bars
+                
+                visHeight = h - yLabelTopPadding - yLabelBottomPadding,
                 yLabelGradation = idealGradation(maxValue, idealLabelCount),
                 yLabelCount = Math.floor(maxValue / yLabelGradation),
-                yLabelMax = yLabelGradation * yLabelCount;           
-            
+                yLabelMax = yLabelGradation * yLabelCount;
+                
             // If precision rounding on yLabelGradation has left the yScale too short, then boost it
             if (yLabelMax < maxValue){
                 yLabelMax += yLabelGradation;
@@ -132,49 +173,48 @@
                 .canvas(dom)
                 .width(w)
                 .height(h);
-
+                
             vizz
                 .add(pv.Rule)
                     .data(pv.range(0, yLabelMax + yLabelGradation, yLabelGradation))
                     .width(visWidth)
-                    .left(yLabelWidth)
+                    .left(yLabelWidth - yLabelPadding)
                     .bottom(function(d) d * (visHeight / yLabelMax) + xLabelStrokeWidth + yLabelBottomPadding)
                     .lineWidth(xLabelStrokeWidth)
                     .strokeStyle(xLabelStrokeColor)
                     
                 .add(pv.Label)
-                    .textStyle(yLabelColor)
                     .left(0)
-                    .text(function(d) xLabelUnit + humanNumber(toFixed(d, yLabelPrecision)))
-                    .textBaseline("middle");            
-                
-            var line = vizz.add(pv.Line)
-                    .data(values)
-                    .bottom(function(d) d * (visHeight / yLabelMax) + yLabelBottomPadding)
-                    .left(function() this.index * xDistance + yLabelWidth + (xDistance * 0.5))
-                    .strokeStyle(strokeStyle);
-                    
-            var point = line.add(pv.Dot)
-                    .title(function(d) xLabelUnit + toFixed(d, tooltipPrecision))
-                    .cursor("help")
-                    .fillStyle(fillStyle);
+                    .textStyle(yLabelColor)
+                    .text(function(d) xLabelUnit + humanNumber(toFixed(d, yLabelPrecision), 2)) // NOTE: necessary to use yLabelPrecision again, due to JavaScript rounding error- TODO: clean this up
+                    .textBaseline("middle");
+
+            var bar = vizz.add(pv.Bar)
+                .data(values)
+                .width(xDistance)
+                .height(function(d) d * (visHeight / yLabelMax) + yLabelBottomPadding)
+                .title(function(d) xLabelUnit + humanNumber(toFixed(d, yLabelPrecision), 2))
+                .cursor("help")
+                .bottom(barBorderWidth + yLabelBottomPadding)
+                .left(function() this.index * (xDistance + barMargin) + yLabelWidth)
+                .fillStyle(fillStyle)
+                .strokeStyle(strokeStyle)
+                .lineWidth(barBorderWidth);
             
-            point.add(pv.Label)
-                .left(function() point.left())
-                .bottom(0)
-                .text(function() years[this.index])
-                .textAlign("center")
-                .textBaseline("baseline")
+            bar.add(pv.Label)
+                .bottom(barBorderWidth + yLabelBottomPadding + 10)
+                .left(function() bar.left() + (xDistance / 2))
+                .text(function() countryName(keys[this.index]))
+                .textAlign("left")
+                .textBaseline("middle")
                 .textStyle(xLabelColor)
-                .font(xLabelFont)
-                .add(pv.Rule)
-                    .bottom(yLabelBottomPadding - xLabelTickHeight)
-                    .height(xLabelTickHeight)
-                    .lineWidth(xLabelStrokeWidth)
-                    .strokeStyle(xLabelStrokeColor);
-        
+                .textAngle(-Math.PI / 2)
+                .font(xLabelFont);
+
             vizz.render();
         }
     </script>
+    
+    <script src="prices.js"></script>
 </body>
 </html>
