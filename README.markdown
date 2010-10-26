@@ -10,6 +10,7 @@ converts them to $US at the current exchange rate and puts them all in
 a handy json file for you to access.
 
 There are two repositories: JSON price data and the scraper.
+License: [MIT](http://opensource.org/licenses/mit-license.php)
 
 ### JSON Price Data ###
 
