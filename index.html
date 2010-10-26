@@ -1,11 +1,54 @@
 <!doctype html>
 <html lang=en>
-<meta charset=utf-8>
 <head>
+    <meta charset=utf-8>
+    <title>Adobe software prices in different countries</title>
+    <!--
+        LICENSE:
+        http://opensource.org/licenses/mit-license.php
+    -->    
+    <style>
+        body {
+            color: #333;
+            font-family: sans-serif;
+            margin: 0.5em 2em;
+        }
+        .intro {
+            font-size: 1.2em;
+            margin-bottom: 1em;
+        }
+        #viz {
+            margin: 1em;
+            overflow:auto;
+        }
+        .product {
+            margin: 1em;
+            float: left;
+        }
+        .product .viz {
+            margin: 0.5em 0.5em 0.5em 2em;
+        }
+    </style>
 </head>
 <body>
-    <div id=redlego-viz></div>
+    <h1>Adobe software prices in different countries</h1>
     
+    <div class=intro>
+        <p>Data scraping by <a href="http://github.com/redlego">RedLego</a>'s Adobe <a href="http://github.com/redlego/scraper">scraper script</a>.<br>
+        
+        <a href="http://dharmafly.com/redlego">This simple visualisation</a> is by <a href="http://twitter.com/premasagar">@premasagar</a>, using <a href="http://vis.stanford.edu/protovis/">Protovis</a>.<br>
+
+        You can <a href="http://github.com/premasagar/redlego">fork the code on Github</a>.</p>
+        
+        <p>For more on the controversy of Adobe's software pricing policy, see <a href="http://getsatisfaction.com/adobe/topics/why_are_uk_prices_nearly_double_us_prices">this discussion thread by Adobe users</a>.</p>
+        
+        <a href=http://github.com/premasagar/redlego title="redlego code, on GitHub"><img style="position: absolute; top: 0; right: 0; border: 0;" src=http://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png alt="Fork me on GitHub" /></a>
+    </div>
+
+    <div id=viz></div>
+    
+    
+    <script src="http://code.jquery.com/jquery-1.4.3.min.js"></script>
     <script>
         var log10 = Math.log(10),
             countryLookup = {
@@ -15,32 +58,6 @@
                 osterreich: "Austria"
             };
         
-        /*
-        function sortByAmount(prices){ // TODO: clean up
-            var countries = [],
-                country, ret = {}, i = 0, len;
-                
-            for (country in prices){
-                if (prices.hasOwnProperty(country)){
-                    countries.push({
-                        id: country,
-                        title: countryName(country),
-                        price: prices[country]
-                    });
-                }
-            }
-            countries.sort(function(a, b){
-                return a.price < b.price;
-            });
-            len = countries.length;
-            
-            for (i=0; i<len; i++){
-                ret[i] = countries[i];
-            }
-            return ret;
-        }
-        */
-        
         function upperCaseWords(str){ // from http://phpjs.org/functions/ucwords:569
             return (str + '').replace(/^([a-z])|\s+([a-z])/g, function($1) {
                 return $1.toUpperCase();
@@ -49,18 +66,6 @@
         
         function countryName(id){
             return countryLookup[id] || upperCaseWords(id.replace("-", " "));
-        }
-        
-        function redlegoViz(data){
-            window.onload = function(){
-                //data = sortByAmount(data["acrobat-9-pro-extended"].prices);
-                data = data["acrobat-9-pro-extended"].prices;
-                barChart({
-                    data: data,
-                    dom: "redlego-viz",
-                    xLabelUnit: "$"
-                });
-           };
         }
     
         function keysvalues(o){
@@ -77,6 +82,32 @@
                 keys: keys,
                 values: values
             }
+        }
+        
+        function redlegoViz(data){
+            var chartsDom = jQuery("#viz");
+        
+            jQuery(window).load(function(){
+                jQuery.each(data, function(productId, product){
+                    var prices = product.prices,
+                        vizDom;
+                        
+                    if (prices && keysvalues(prices).keys.length > 1){
+                        vizDom = jQuery("<div class='viz'></div>");
+                        jQuery(
+                            "<div class='product " + productId + "'>" + 
+                                "<h2>" + product["product-name"] + "</h2>" +
+                            "</div>"
+                        ).append(vizDom).appendTo(chartsDom);
+                        
+                        barChart({
+                            data: prices,
+                            xLabelUnit: "$",
+                            dom: vizDom[0]
+                        });
+                    }
+                });
+           });
         }
         
         // Returns a number to a certain number of significant figures
@@ -115,7 +146,7 @@
         }
     </script>
     
-    <script src="js/protovis-d3.2.js"></script>    
+    <script src="js/protovis-r3.2.js"></script>    
     <script type="text/javascript+protovis">        
         function barChart(options){
             var // Options
@@ -136,12 +167,12 @@
                 tooltipPrecision = 2,
                 
                 // Styles
-                fillStyle = "#a00",
+                fillStyle = "#733",
                 strokeStyle = "#600",
                 xLabelStrokeColor = "#d99",
                 yLabelColor = "#333",
                 xLabelColor = "#fff",
-                xLabelFont = "bold 18px sans-serif",
+                xLabelFont = "bold 16px sans-serif",
                 xLabelStrokeWidth = 0.5,
                 barBorderWidth = 0.5,
                 // TODO: factor barBorderWidth into width and distribution calculations
@@ -168,9 +199,12 @@
             if (yLabelMax < maxValue){
                 yLabelMax += yLabelGradation;
             }
+            
+            if (dom){
+                vizz.canvas(dom);
+            }
                 
             vizz
-                .canvas(dom)
                 .width(w)
                 .height(h);
                 
@@ -213,6 +247,32 @@
 
             vizz.render();
         }
+        
+        /*
+        function sortByAmount(prices){ // TODO: clean up
+            var countries = [],
+                country, ret = {}, i = 0, len;
+                
+            for (country in prices){
+                if (prices.hasOwnProperty(country)){
+                    countries.push({
+                        id: country,
+                        title: countryName(country),
+                        price: prices[country]
+                    });
+                }
+            }
+            countries.sort(function(a, b){
+                return a.price < b.price;
+            });
+            len = countries.length;
+            
+            for (i=0; i<len; i++){
+                ret[i] = countries[i];
+            }
+            return ret;
+        }
+        */
     </script>
     
     <script src="prices.js"></script>
