@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang=en>
+<meta charset=utf-8>
+<head>
+    <script src="js/protovis-d3.2.js"></script>
+    <script src="js/viz.js"></script>
+</head>
+<body>
+    <script>
+        function viz(data){
+            var data = window.JSON.parse(data);
+        
+            for (product in data){
+                if (data.hasOwnProperty(product)){
+                    
+                }
+            }
+            lineGraph({
+                data: data["acrobat-9-pro-extended"].prices,
+                dom: "redlego-viz",
+                xLabelUnit: "$"
+            });
+        }
+    
+        // Get data via Ajax request
+        get("prices.json", viz);
+    </script>
+    
+    <script type="text/javascript+protovis">
+        var log10 = Math.log(10);
+    
+        function keysvalues(o){
+            var keys = [],
+                values = [];
+                
+            for (key in o){
+                if (o.hasOwnProperty(key)){
+                    keys.push(key);
+                    values.push(o[key]);
+                }
+            }
+            return {
+                keys: keys,
+                values: values
+            }
+        }
+        
+        // Returns a number to a certain number of significant figures
+        // toPrecision(232, 2) === 230
+        // toPrecision(1, 5) === 1; // precision normalised
+        function toPrecision(n, precision){
+            n = parseFloat(n);
+            return Number(n.toPrecision(precision));
+        }
+        
+        function toFixed(n, decimalPlaces){
+            n = parseFloat(n);
+            return Number(n.toFixed(decimalPlaces));
+        }
+        
+        // idealGradation(9260) === 10000
+        function idealGradation(maxValue, idealLabelCount){
+            var closestPowerOf10 = Math.pow(10, Math.round(Math.log(maxValue / idealLabelCount) / log10));
+            return (maxValue / closestPowerOf10 > idealLabelCount * 2) ?
+                closestPowerOf10 * 2 :
+                closestPowerOf10;
+        }
+        
+        // humanNumber(4555) === "4.555K";
+        // humanNumber(4555, 2) === "4.6K";
+        function humanNumber(n, precision){            
+            n = precision ? toPrecision(n, precision) : n;
+
+            if (n >= 1000000){
+                return n / 1000000 + "M";
+            }
+            if (n >= 1000){
+                return n / 1000 + "K";
+            }
+            return n;
+        }
+        
+        function lineGraph(options){
+            var // Options
+                data = keysvalues(options.data),
+                dom = options.dom,
+                xLabelUnit = options.xLabelUnit,
+            
+                // Chart sizes                
+                w = 330,
+                h = 300,
+                yLabelTopPadding = 5,
+                yLabelBottomPadding = 14,
+                yLabelWidth = 40,
+                idealLabelCount = 5,
+                yLabelPrecision = 1,
+                xLabelTickHeight = 3,
+                tooltipPrecision = 3,
+                
+                // Styles
+                strokeStyle = "#762a4b",
+                fillStyle = "#d5c5c6",
+                xLabelStrokeColor = "#d5c5c6",
+                yLabelColor = "#333",
+                xLabelColor = "#333",
+                xLabelFont = "normal 10px sans-serif",
+                xLabelStrokeWidth = 0.5,
+                lineWidth = 5,
+                
+                // The visualisation object
+                vizz = new pv.Panel(),
+                
+                // Processing
+                years = data.keys,
+                values = data.values,
+                numValues = values.length,
+                maxValue = Math.max.apply(null, values),
+                xDistance = Math.floor((w - yLabelWidth) / numValues),
+                visWidth = xDistance * numValues + yLabelWidth,
+                visHeight = h - yLabelTopPadding - yLabelBottomPadding,
+                
+                yLabelGradation = idealGradation(maxValue, idealLabelCount),
+                yLabelCount = Math.floor(maxValue / yLabelGradation),
+                yLabelMax = yLabelGradation * yLabelCount;           
+            
+            // If precision rounding on yLabelGradation has left the yScale too short, then boost it
+            if (yLabelMax < maxValue){
+                yLabelMax += yLabelGradation;
+            }
+                
+            vizz
+                .canvas(dom)
+                .width(w)
+                .height(h);
+
+            vizz
+                .add(pv.Rule)
+                    .data(pv.range(0, yLabelMax + yLabelGradation, yLabelGradation))
+                    .width(visWidth)
+                    .left(yLabelWidth)
+                    .bottom(function(d) d * (visHeight / yLabelMax) + xLabelStrokeWidth + yLabelBottomPadding)
+                    .lineWidth(xLabelStrokeWidth)
+                    .strokeStyle(xLabelStrokeColor)
+                    
+                .add(pv.Label)
+                    .textStyle(yLabelColor)
+                    .left(0)
+                    .text(function(d) xLabelUnit + humanNumber(toFixed(d, yLabelPrecision)))
+                    .textBaseline("middle");            
+                
+            var line = vizz.add(pv.Line)
+                    .data(values)
+                    .bottom(function(d) d * (visHeight / yLabelMax) + yLabelBottomPadding)
+                    .left(function() this.index * xDistance + yLabelWidth + (xDistance * 0.5))
+                    .strokeStyle(strokeStyle);
+                    
+            var point = line.add(pv.Dot)
+                    .title(function(d) xLabelUnit + toFixed(d, tooltipPrecision))
+                    .cursor("help")
+                    .fillStyle(fillStyle);
+            
+            point.add(pv.Label)
+                .left(function() point.left())
+                .bottom(0)
+                .text(function() years[this.index])
+                .textAlign("center")
+                .textBaseline("baseline")
+                .textStyle(xLabelColor)
+                .font(xLabelFont)
+                .add(pv.Rule)
+                    .bottom(yLabelBottomPadding - xLabelTickHeight)
+                    .height(xLabelTickHeight)
+                    .lineWidth(xLabelStrokeWidth)
+                    .strokeStyle(xLabelStrokeColor);
+        
+            vizz.render();
+        }
+    </script>
+</body>
+</html>
