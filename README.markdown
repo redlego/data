@@ -10,7 +10,7 @@ converts them to $US at the current exchange rate and puts them all in
 a handy json file for you to access.
 
 There are two repositories: JSON price data and the scraper.
-License: [MIT](http://opensource.org/licenses/mit-license.php)
+
 
 ### JSON Price Data ###
 
@@ -45,3 +45,7 @@ Run `python redlego.py`
 ### Discussion ###
 
 You can find a long-running discussion of Adobe's international pricing here: [Why are UK prices nearly double US prices?](http://getsatisfaction.com/adobe/topics/why_are_uk_prices_nearly_double_us_prices).
+
+### Licence ###
+
+[opensource.org/licenses/mit-license.php](http://opensource.org/licenses/mit-license.php)
