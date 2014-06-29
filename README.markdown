@@ -11,6 +11,12 @@ a handy json file for you to access.
 
 There are two repositories: JSON price data and the scraper.
 
+### Data visualisation ###
+Compare Adobe's prices around the world with this data visualisation by [@premasagar](http://twitter.com/premasagar):
+
+**[http://dharmafly.com/redlego/](http://dharmafly.com/redlego)**
+
+
 ### JSON Price Data ###
 
 **[http://github.com/redlego/data/](http://github.com/redlego/data/)**
@@ -44,3 +50,7 @@ Run `python redlego.py`
 ### Discussion ###
 
 You can find a long-running discussion of Adobe's international pricing here: [Why are UK prices nearly double US prices?](http://getsatisfaction.com/adobe/topics/why_are_uk_prices_nearly_double_us_prices).
+
+### Licence ###
+
+[opensource.org/licenses/mit-license.php](http://opensource.org/licenses/mit-license.php)

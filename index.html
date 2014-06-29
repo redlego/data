@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang=en>
+<head>
+    <meta charset=utf-8>
+    <title>Adobe software prices in different countries</title>
+    <!--
+        LICENSE:
+        http://opensource.org/licenses/mit-license.php
+    -->    
+    <style>
+        body {
+            color: #333;
+            font-family: sans-serif;
+            margin: 0.5em 2em;
+        }
+        .intro {
+            font-size: 1.2em;
+            margin-bottom: 1em;
+        }
+        #viz {
+            margin: 1em;
+            overflow:auto;
+        }
+        .product {
+            margin: 1em;
+            float: left;
+        }
+        .product .viz {
+            margin: 0.5em 0.5em 0.5em 2em;
+        }
+    </style>
+</head>
+<body>
+    <h1>Adobe software prices in different countries</h1>
+    
+    <div class=intro>
+        <p>Data scraping by <a href="http://github.com/redlego">RedLego</a>'s Adobe <a href="http://github.com/redlego/scraper">scraper script</a>.<br>
+        
+        <a href="http://dharmafly.com/redlego/">This data visualisation</a> is by <a href="http://twitter.com/premasagar">@premasagar</a>, using <a href="http://vis.stanford.edu/protovis/">Protovis</a>.<br>
+
+        You can <a href="http://github.com/premasagar/redlego">fork the code on Github</a>.</p>
+        
+        <p>For more on the controversy of Adobe's software pricing policy, see <a href="http://getsatisfaction.com/adobe/topics/why_are_uk_prices_nearly_double_us_prices">this discussion thread by Adobe users</a>.</p>
+        
+        <a href=http://github.com/premasagar/redlego title="redlego code, on GitHub"><img style="position: absolute; top: 0; right: 0; border: 0;" src=http://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png alt="Fork me on GitHub" /></a>
+    </div>
+
+    <div id=viz></div>
+    
+    
+    <script src="http://code.jquery.com/jquery-1.4.3.min.js"></script>
+    <script>
+        var log10 = Math.log(10),
+            countryLookup = {
+                sverige: "Sweden",
+                deutschland: "Germany",
+                schweiz: "Switzerland",
+                osterreich: "Austria"
+            };
+        
+        function upperCaseWords(str){ // from http://phpjs.org/functions/ucwords:569
+            return (str + '').replace(/^([a-z])|\s+([a-z])/g, function($1) {
+                return $1.toUpperCase();
+            });
+        }
+        
+        function countryName(id){
+            return countryLookup[id] || upperCaseWords(id.replace("-", " "));
+        }
+    
+        function keysvalues(o){
+            var keys = [],
+                values = [];
+                
+            for (key in o){
+                if (o.hasOwnProperty(key)){
+                    keys.push(key);
+                    values.push(o[key]);
+                }
+            }
+            return {
+                keys: keys,
+                values: values
+            }
+        }
+        
+        function redlegoViz(data){
+            var chartsDom = jQuery("#viz");
+        
+            jQuery(window).load(function(){
+                jQuery.each(data, function(productId, product){
+                    var prices = product.prices,
+                        vizDom;
+                        
+                    if (prices && keysvalues(prices).keys.length > 1){
+                        vizDom = jQuery("<div class='viz'></div>");
+                        jQuery(
+                            "<div class='product " + productId + "'>" + 
+                                "<h2>" + product["product-name"] + "</h2>" +
+                            "</div>"
+                        ).append(vizDom).appendTo(chartsDom);
+                        
+                        barChart({
+                            data: prices,
+                            xLabelUnit: "$",
+                            dom: vizDom[0]
+                        });
+                    }
+                });
+           });
+        }
+        
+        // Returns a number to a certain number of significant figures
+        // toPrecision(232, 2) === 230
+        // toPrecision(1, 5) === 1; // precision normalised
+        function toPrecision(n, precision){
+            return Number(parseFloat(n).toPrecision(precision));
+        }
+        
+        function toFixed(n, decimalPlaces){
+            return Number(parseFloat(n).toFixed(decimalPlaces));
+        }
+        
+        // idealGradation(9260) === 10000
+        function idealGradation(maxValue, idealLabelCount){
+            var closestPowerOf10 = Math.pow(10, Math.round(Math.log(maxValue / idealLabelCount) / log10));
+            return (maxValue / closestPowerOf10 > idealLabelCount * 2) ?
+                closestPowerOf10 * 2 :
+                closestPowerOf10;
+        }
+        
+        // humanNumber(4555) === "4.555K";
+        // humanNumber(4555, 2) === "4.6K";
+        function humanNumber(n, precision){ // TODO: DRY
+            n = precision ? toFixed(n, precision) : n;
+            
+            if (n >= 1000000){
+                n = n / 1000000;
+                n = (precision ? toFixed(n, precision) : n) + "M";
+            }
+            if (n >= 1000){
+                n = n / 1000;
+                n = (precision ? toFixed(n, precision) : n) + "K";
+            }
+            return n;
+        }
+    </script>
+    
+    <script src="js/protovis-r3.2.js"></script>    
+    <script type="text/javascript+protovis">        
+        function barChart(options){
+            var // Options
+                data = keysvalues(options.data),
+                dom = options.dom,
+                xLabelUnit = options.xLabelUnit,
+                
+                // Chart sizes
+                w = 600,
+                h = 300,
+                yLabelTopPadding = 7,
+                yLabelBottomPadding = 5,
+                barMargin = 7,
+                yLabelWidth = 40,
+                yLabelPadding = 7, // where the lines start from
+                idealLabelCount = 5,
+                yLabelPrecision = 2,
+                tooltipPrecision = 2,
+                
+                // Styles
+                fillStyle = "#733",
+                strokeStyle = "#600",
+                xLabelStrokeColor = "#d99",
+                yLabelColor = "#333",
+                xLabelColor = "#fff",
+                xLabelFont = "bold 16px sans-serif",
+                xLabelStrokeWidth = 0.5,
+                barBorderWidth = 0.5,
+                // TODO: factor barBorderWidth into width and distribution calculations
+                
+                // The visualisation object
+                vizz = new pv.Panel(),
+                
+                // Processing
+                keys = data.keys,
+                values = data.values,
+                numValues = values.length,
+                maxValue = Math.max.apply(null, values),
+                
+                // Bar specific
+                xDistance = Math.floor((w - yLabelWidth) / numValues) - barMargin,
+                visWidth = (xDistance + barMargin) * numValues + yLabelWidth - barMargin, // labels + bars
+                
+                visHeight = h - yLabelTopPadding - yLabelBottomPadding,
+                yLabelGradation = idealGradation(maxValue, idealLabelCount),
+                yLabelCount = Math.floor(maxValue / yLabelGradation),
+                yLabelMax = yLabelGradation * yLabelCount;
+                
+            // If precision rounding on yLabelGradation has left the yScale too short, then boost it
+            if (yLabelMax < maxValue){
+                yLabelMax += yLabelGradation;
+            }
+            
+            if (dom){
+                vizz.canvas(dom);
+            }
+                
+            vizz
+                .width(w)
+                .height(h);
+                
+            vizz
+                .add(pv.Rule)
+                    .data(pv.range(0, yLabelMax + yLabelGradation, yLabelGradation))
+                    .width(visWidth)
+                    .left(yLabelWidth - yLabelPadding)
+                    .bottom(function(d) d * (visHeight / yLabelMax) + xLabelStrokeWidth + yLabelBottomPadding)
+                    .lineWidth(xLabelStrokeWidth)
+                    .strokeStyle(xLabelStrokeColor)
+                    
+                .add(pv.Label)
+                    .left(0)
+                    .textStyle(yLabelColor)
+                    .text(function(d) xLabelUnit + humanNumber(toFixed(d, yLabelPrecision), 2)) // NOTE: necessary to use yLabelPrecision again, due to JavaScript rounding error- TODO: clean this up
+                    .textBaseline("middle");
+
+            var bar = vizz.add(pv.Bar)
+                .data(values)
+                .width(xDistance)
+                .height(function(d) d * (visHeight / yLabelMax) + yLabelBottomPadding)
+                .title(function(d) xLabelUnit + humanNumber(toFixed(d, yLabelPrecision), 2))
+                .cursor("help")
+                .bottom(barBorderWidth + yLabelBottomPadding)
+                .left(function() this.index * (xDistance + barMargin) + yLabelWidth)
+                .fillStyle(fillStyle)
+                .strokeStyle(strokeStyle)
+                .lineWidth(barBorderWidth);
+            
+            bar.add(pv.Label)
+                .bottom(barBorderWidth + yLabelBottomPadding + 10)
+                .left(function() bar.left() + (xDistance / 2))
+                .text(function() countryName(keys[this.index]))
+                .textAlign("left")
+                .textBaseline("middle")
+                .textStyle(xLabelColor)
+                .textAngle(-Math.PI / 2)
+                .font(xLabelFont);
+
+            vizz.render();
+        }
+        
+        /*
+        function sortByAmount(prices){ // TODO: clean up
+            var countries = [],
+                country, ret = {}, i = 0, len;
+                
+            for (country in prices){
+                if (prices.hasOwnProperty(country)){
+                    countries.push({
+                        id: country,
+                        title: countryName(country),
+                        price: prices[country]
+                    });
+                }
+            }
+            countries.sort(function(a, b){
+                return a.price < b.price;
+            });
+            len = countries.length;
+            
+            for (i=0; i<len; i++){
+                ret[i] = countries[i];
+            }
+            return ret;
+        }
+        */
+    </script>
+    
+    <script src="prices.js"></script>
+</body>
+</html>
